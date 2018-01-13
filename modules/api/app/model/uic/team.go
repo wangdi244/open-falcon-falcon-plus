@@ -12,6 +12,7 @@ type Team struct {
 	Name    string `json:"name"`
 	Resume  string `json:"resume"`
 	Creator int64  `json:"creator"`
+ 	Serviceline string `json:"serviceline"`
 }
 
 func (this Team) TableName() string {

@@ -95,6 +95,5 @@ func GetUser(c *gin.Context) (user uic.User, err error) {
 	}
 	dt := db.Table("user").Where(&user).Find(&user)
 	err = dt.Error
-        //log.Debugf("dt: %v, err: %v", dt, err)
 	return
 }

@@ -15,7 +15,7 @@ type User struct {
 	IM     string `json:"im" gorm:"column:im"`
 	QQ     string `json:"qq" gorm:"column:qq"`
 	Role   int    `json:"role"`
-	Serviceline   string    `json:"serviceline"`
+	Serviceline string `json:"serviceline"`
 }
 
 func skipAccessControll() bool {

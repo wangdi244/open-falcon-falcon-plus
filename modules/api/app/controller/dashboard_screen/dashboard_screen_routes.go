@@ -20,6 +20,7 @@ func Routes(r *gin.Engine) {
 	authapi.POST("/screen", ScreenCreate)
 	authapi.GET("/screen/:screen_id", ScreenGet)
 	authapi.GET("/screens/pid/:pid/:serviceline", ScreenGetsByPid)
+	authapi.GET("/screens/pid/:pid", ScreenGetsId)
 	authapi.GET("/screens", ScreenGetsAll)
 	authapi.DELETE("/screen/:screen_id", ScreenDelete)
 	authapi.PUT("/screen/:screen_id", ScreenUpdate)

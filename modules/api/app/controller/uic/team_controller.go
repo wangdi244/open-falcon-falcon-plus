@@ -19,6 +19,7 @@ type CTeam struct {
 	Team        uic.Team   `json:"team"`
 	TeamCreator string     `json:"creator_name"`
 	Users       []uic.User `json:"users"`
+	Serviceline string     `json:"serviceline"`
 }
 
 //support root as admin
@@ -53,11 +54,15 @@ func Teams(c *gin.Context) {
 		err = dt.Error
 	} else {
 		//team creator and team member can manage the team
+		//dt = db.Uic.Raw(
+		//	`select a.* from team as a, rel_team_user as b 
+		//	where a.name regexp ? and a.serviceline = ? and a.id = b.tid and b.uid = ? 
+		//	UNION select * from team where name regexp ? and creator = ?`,
+		//	query, user.Serviceline,user.ID, query, user.ID).Scan(&teams)
 		dt = db.Uic.Raw(
-			`select a.* from team as a, rel_team_user as b 
-			where a.name regexp ? and a.id = b.tid and b.uid = ? 
-			UNION select * from team where name regexp ? and creator = ?`,
-			query, user.ID, query, user.ID).Scan(&teams)
+                      `select a.* from team as a, rel_team_user as b
+                      where a.name regexp ? and a.serviceline = ? and a.id = b.tid`,
+                      query, user.Serviceline).Scan(&teams)
 		err = dt.Error
 	}
 	if err != nil {
@@ -88,6 +93,7 @@ type APICreateTeamInput struct {
 	Name    string  `json:"team_name" binding:"required"`
 	Resume  string  `json:"resume"`
 	UserIDs []int64 `json:"users"`
+        Serviceline string `json:"serviceline"`
 }
 
 //every user can create a team
@@ -107,6 +113,7 @@ func CreateTeam(c *gin.Context) {
 		Name:    cteam.Name,
 		Resume:  cteam.Resume,
 		Creator: user.ID,
+		Serviceline: cteam.Serviceline,
 	}
 	dt := db.Uic.Table("team").Create(&team)
 	if dt.Error != nil {

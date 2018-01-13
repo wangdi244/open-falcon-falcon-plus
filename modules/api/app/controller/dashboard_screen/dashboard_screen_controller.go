@@ -11,15 +11,10 @@ import (
 func ScreenCreate(c *gin.Context) {
 	pid := c.DefaultPostForm("pid", "0")
 	name := c.DefaultPostForm("name", "")
-        serviceline := c.DefaultPostForm("serviceline", "")
+	serviceline := c.DefaultPostForm("serviceline", "")
 	if name == "" {
 		h.JSONR(c, badstatus, "empty name")
 		return
-	}
-	
-	if serviceline == "" {
-		h.JSONR(c, badstatus, "empty name")
-                return
 	}
 
 	ipid, err := strconv.Atoi(pid)
@@ -70,7 +65,7 @@ func ScreenGet(c *gin.Context) {
 
 func ScreenGetsByPid(c *gin.Context) {
 	id := c.Param("pid")
-        serviceline := c.Param("serviceline")
+	serviceline := c.Param("serviceline")
 
 	pid, err := strconv.Atoi(id)
 	if err != nil {
@@ -83,25 +78,41 @@ func ScreenGetsByPid(c *gin.Context) {
                 return
         }
 
+
 	screens := []m.DashboardScreen{}
 	if serviceline == "Root" {
 	    dt := db.Dashboard.Table("dashboard_screen").Where("pid = ?", pid).Find(&screens)
 	    if dt.Error != nil {
-                h.JSONR(c, badstatus, dt.Error)
-                return
-            }
-	} else {
-	    dt := db.Dashboard.Table("dashboard_screen").Where("pid = ? and serviceline = ?", pid, serviceline).Find(&screens)
+		h.JSONR(c, badstatus, dt.Error)
+		return
+           }
+       }else{
+	    //dt := db.Dashboard.Table("dashboard_screen").Where("pid = ? and serviceline in (?)", pid, serviceline).Find(&screens)
+	    dt := db.Dashboard.Table("dashboard_screen").Raw("SELECT * FROM `dashboard_screen`  WHERE (pid = ? and serviceline in (?))",pid, serviceline).Scan(&screens)
 	    if dt.Error != nil {
                 h.JSONR(c, badstatus, dt.Error)
                 return
           }
 	}
-	//dt := db.Dashboard.Table("dashboard_screen").Where("pid = ? and serviceline = ?", pid, serviceline).Find(&screens)
-	//if dt.Error != nil {
-	//	h.JSONR(c, badstatus, dt.Error)
-	//	return
-	//}
+	h.JSONR(c, screens)
+}
+
+func ScreenGetsId(c *gin.Context) {
+	id := c.Param("pid")
+
+	pid, err := strconv.Atoi(id)
+	if err != nil {
+		h.JSONR(c, badstatus, "invalid screen pid")
+		return
+	}
+
+	screens := []m.DashboardScreen{}
+	dt := db.Dashboard.Table("dashboard_screen").Where("id = ?", pid).Find(&screens)
+	if dt.Error != nil {
+		h.JSONR(c, badstatus, dt.Error)
+		return
+	}
+
 	h.JSONR(c, screens)
 }
 

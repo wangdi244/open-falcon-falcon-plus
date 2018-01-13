@@ -77,6 +77,6 @@ func CurlAction(id int) *Action {
 		log.Errorf("curl %s fail: %v", uri, err)
 		return nil
 	}
-
+        log.Debug("CurlAction------%v",act)
 	return &act
 }

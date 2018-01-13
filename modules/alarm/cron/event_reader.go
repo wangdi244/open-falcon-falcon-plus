@@ -13,12 +13,14 @@ import (
 
 func ReadHighEvent() {
 	queues := g.Config().Redis.HighQueues
+	log.Debug("queues %s",queues )
 	if len(queues) == 0 {
 		return
 	}
 
 	for {
 		event, err := popEvent(queues)
+                log.Debug("event %v",event)
 		if err != nil {
 			time.Sleep(time.Second)
 			continue

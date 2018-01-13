@@ -12,11 +12,13 @@ import (
 
 func consume(event *cmodel.Event, isHigh bool) {
 	actionId := event.ActionId()
+	log.Debug("actionId-------%v",actionId)
 	if actionId <= 0 {
 		return
 	}
-
+	
 	action := api.GetAction(actionId)
+	log.Debug("action-------%v",action)
 	if action == nil {
 		return
 	}
@@ -34,12 +36,14 @@ func consume(event *cmodel.Event, isHigh bool) {
 
 // 高优先级的不做报警合并
 func consumeHighEvents(event *cmodel.Event, action *api.Action) {
+	log.Debug("consumer--high--%v",action.Uic)
 	if action.Uic == "" {
 		return
 	}
 
 	phones, mails, ims := api.ParseTeams(action.Uic)
-
+	log.Debug("phones----mails----ims %s %s %s",phones,mails,ims)
+	
 	smsContent := GenerateSmsContent(event)
 	mailContent := GenerateMailContent(event)
 	imContent := GenerateIMContent(event)

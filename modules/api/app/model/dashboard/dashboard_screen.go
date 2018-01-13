@@ -13,6 +13,7 @@ type DashboardScreen struct {
 	ID   int64  `json:"id" gorm:"column:id"`
 	PID  int64  `json:"pid" gorm:"column:pid"`
 	Name string `json:"name" gorm:"column:name"`
+	ServiceLine string `json:"serviceline" gorm:"column:serviceline"`
 }
 
 func (this DashboardScreen) TableName() string {

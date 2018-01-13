@@ -393,6 +393,7 @@ func GetActionByID(c *gin.Context) {
 		h.JSONR(c, badstatus, dt.Error)
 		return
 	}
-
+	
+	log.Debug("GetACtionByID-------",act_id,"---------",act)
 	h.JSONR(c, act)
 }
