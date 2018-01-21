@@ -31,6 +31,7 @@ func Teams(c *gin.Context) {
 	)
 	pageTmp := c.DefaultQuery("page", "")
 	limitTmp := c.DefaultQuery("limit", "")
+        serviceline := c.DefaultQuery("serviceline", "")
 	page, limit, err = h.PageParser(pageTmp, limitTmp)
 	if err != nil {
 		h.JSONR(c, badstatus, err.Error())
@@ -60,9 +61,9 @@ func Teams(c *gin.Context) {
 		//	UNION select * from team where name regexp ? and creator = ?`,
 		//	query, user.Serviceline,user.ID, query, user.ID).Scan(&teams)
 		dt = db.Uic.Raw(
-                      `select a.* from team as a, rel_team_user as b
-                      where a.name regexp ? and a.serviceline = ? and a.id = b.tid`,
-                      query, user.Serviceline).Scan(&teams)
+                      `select distinct a.* from team as a, rel_team_user as b
+                      where a.name regexp ? and a.serviceline in (?) and a.id = b.tid`,
+                      query, serviceline).Scan(&teams)
 		err = dt.Error
 	}
 	if err != nil {
