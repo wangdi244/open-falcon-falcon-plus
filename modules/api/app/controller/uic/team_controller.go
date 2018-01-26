@@ -31,7 +31,7 @@ func Teams(c *gin.Context) {
 	)
 	pageTmp := c.DefaultQuery("page", "")
 	limitTmp := c.DefaultQuery("limit", "")
-        serviceline := c.DefaultQuery("serviceline", "")
+        //serviceid := c.DefaultQuery("serviceline", "")
 	page, limit, err = h.PageParser(pageTmp, limitTmp)
 	if err != nil {
 		h.JSONR(c, badstatus, err.Error())
@@ -55,16 +55,15 @@ func Teams(c *gin.Context) {
 		err = dt.Error
 	} else {
 		//team creator and team member can manage the team
-		//dt = db.Uic.Raw(
-		//	`select a.* from team as a, rel_team_user as b 
-		//	where a.name regexp ? and a.serviceline = ? and a.id = b.tid and b.uid = ? 
-		//	UNION select * from team where name regexp ? and creator = ?`,
-		//	query, user.Serviceline,user.ID, query, user.ID).Scan(&teams)
 		dt = db.Uic.Raw(
-                      `select distinct a.* from team as a, rel_team_user as b
-                      where a.name regexp ? and a.serviceline in (?) and a.id = b.tid`,
-                      query, serviceline).Scan(&teams)
-		err = dt.Error
+			`select a.* from team as a, rel_team_user as b 
+			where a.name regexp ? and a.id = b.tid and b.uid = ? 
+			UNION select * from team where name regexp ? and creator = ?`,
+			query,user.ID, query, user.ID).Scan(&teams)
+		//dt = db.Uic.Raw(
+                //      `select distinct a.* from team as a, rel_team_user as b
+                //       where a.name regexp ? and a.id in (?) and a.id = b.tid`,
+                //       query, []string{serviceid}).Scan(&teams)
 	}
 	if err != nil {
 		h.JSONR(c, badstatus, err)

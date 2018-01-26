@@ -58,7 +58,7 @@ func Start() {
 // RRA.Point.Size
 const (
        //RRA1PointCnt   = 720 // 1m一个点存12h
-        RRA1PointCnt   = 43200 // 1m一个点存1个月
+        RRA1PointCnt   = 21600 // 1m一个点存15天
 	RRA5PointCnt   = 576 // 5m一个点存2d
 	RRA20PointCnt  = 504 // 20m一个点存7d
 	RRA180PointCnt = 766 // 3h一个点存3month

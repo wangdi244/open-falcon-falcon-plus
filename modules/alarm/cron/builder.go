@@ -5,7 +5,7 @@ import (
 
 	"github.com/open-falcon/falcon-plus/common/model"
 	"github.com/open-falcon/falcon-plus/common/utils"
-	"github.com/open-falcon/falcon-plus/modules/alarm/g"
+	//"github.com/open-falcon/falcon-plus/modules/alarm/g"
 )
 
 func BuildCommonSMSContent(event *model.Event) string {
@@ -45,9 +45,10 @@ func BuildCommonIMContent(event *model.Event) string {
 }
 
 func BuildCommonMailContent(event *model.Event) string {
-	link := g.Link(event)
+        //link := g.Link(event)
 	return fmt.Sprintf(
-		"%s\r\nP%d\r\nEndpoint:%s\r\nMetric:%s\r\nTags:%s\r\n%s: %s%s%s\r\nNote:%s\r\nMax:%d, Current:%d\r\nTimestamp:%s\r\n%s\r\n",
+		//"%s\r\nP%d\r\nEndpoint:%s\r\nMetric:%s\r\nTags:%s\r\n%s: %s%s%s\r\nNote:%s\r\nMax:%d, Current:%d\r\nTimestamp:%s\r\n%s\r\n",
+		"%s\r\nP%d\r\nEndpoint:%s\r\nMetric:%s\r\nTags:%s\r\n%s: %s%s%s\r\nNote:%s\r\nMax:%d, Current:%d\r\nTimestamp:%s\r\n",
 		event.Status,
 		event.Priority(),
 		event.Endpoint,
@@ -61,7 +62,7 @@ func BuildCommonMailContent(event *model.Event) string {
 		event.MaxStep(),
 		event.CurrentStep,
 		event.FormattedTime(),
-		link,
+		//link,
 	)
 }
 
