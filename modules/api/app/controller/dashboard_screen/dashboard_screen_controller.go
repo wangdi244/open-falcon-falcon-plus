@@ -6,6 +6,8 @@ import (
 	h "github.com/open-falcon/falcon-plus/modules/api/app/helper"
 	m "github.com/open-falcon/falcon-plus/modules/api/app/model/dashboard"
 	"strconv"
+        "strings"
+       
 )
 
 func ScreenCreate(c *gin.Context) {
@@ -88,12 +90,23 @@ func ScreenGetsByPid(c *gin.Context) {
            }
        }else{
 	    //dt := db.Dashboard.Table("dashboard_screen").Where("pid = ? and serviceline in (?)", pid, serviceline).Find(&screens)
-	    dt := db.Dashboard.Table("dashboard_screen").Raw("SELECT * FROM `dashboard_screen`  WHERE (pid = ? and serviceline in (?))",pid, serviceline).Scan(&screens)
+	    serviceline_strings := strings.Split(serviceline,",")
+	    //for _,s := range serviceline_strings {
+	    //	dt := db.Dashboard.Table("dashboard_screen").Raw("SELECT * FROM `dashboard_screen`  WHERE (pid = ? and serviceline in(?))",pid, s).Scan(&screens)
+	    //	if dt.Error != nil {
+            //        h.JSONR(c, badstatus, dt.Error)
+            //        return
+				
+	    //}
+	    //dt := db.Dashboard.Table("dashboard_screen").Raw("SELECT * FROM `dashboard_screen`  WHERE (pid = ? and serviceline in(?))",pid, serviceline).Scan(&screens)
+	    dt := db.Dashboard.Table("dashboard_screen").Where("pid = ? and serviceline in (?)", pid, serviceline_strings).Find(&screens)
+	    //dt := db.Dashboard.Exec("SELECT * FROM `dashboard_screen`  WHERE (pid = ? and serviceline in (?))",pid, serviceline_strings)
 	    if dt.Error != nil {
                 h.JSONR(c, badstatus, dt.Error)
                 return
           }
-	}
+	//}
+       }
 	h.JSONR(c, screens)
 }
 
